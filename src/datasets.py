@@ -1,4 +1,4 @@
-from transformers import AutoProcessor 
+from transformers import AutoProcessor
 from .config import config
 from .tokenizer import custom_tokenizer
 from .inkml_parser import read_inkml_file, get_ink_sequence_token, get_ink_image
@@ -11,15 +11,24 @@ TIME_SAMPLING_DELTA = config.get("INK_TIME_SAMPLING_DELTA", 30)
 
 processor = AutoProcessor.from_pretrained(PRETRAINED_REPO_ID)
 
-# change the default tokenizer into custom tokenizer 
+# change the default tokenizer into custom tokenizer
 processor.tokenizer = custom_tokenizer
+
 
 def train_collate_fn(batch):
     images = [item["image"] for item in batch]
     text_sequences = ["<image>" + item["text"] for item in batch]
     labels = [item["label"] for item in batch]
 
-    inputs = processor(text=text_sequences, images=images, suffix=labels, return_tensors="pt", padding=True, truncation="only_second", max_length=config.get("max_length"))
+    inputs = processor(
+        text=text_sequences,
+        images=images,
+        suffix=labels,
+        return_tensors="pt",
+        padding=True,
+        truncation="only_second",
+        max_length=config.get("max_length"),
+    )
 
     input_ids = inputs["input_ids"]
     token_type_ids = inputs["token_type_ids"]
@@ -33,12 +42,20 @@ def train_collate_fn(batch):
 
     return input_ids, token_type_ids, attention_mask, pixel_values, labels
 
+
 def test_collate_fn(batch):
     images = [item["image"] for item in batch]
     text_sequences = ["<image>" + item["text"] for item in batch]
     labels = [item["label"] for item in batch]
 
-    inputs = processor(text=text_sequences, images=images, return_tensors="pt", padding=True, truncation="only_second", max_length=config.get("max_length"))
+    inputs = processor(
+        text=text_sequences,
+        images=images,
+        return_tensors="pt",
+        padding=True,
+        truncation="only_second",
+        max_length=config.get("max_length"),
+    )
 
     input_ids = inputs["input_ids"]
     attention_mask = inputs["attention_mask"]
@@ -48,13 +65,17 @@ def test_collate_fn(batch):
 
 
 class MathWritingDataset(Dataset):
-    def __init__(self, dataset_dir, data_types=["train", "symbols", "synthetic"], transform=None):
+    def __init__(
+        self, dataset_dir, data_types=["train", "symbols", "synthetic"], transform=None
+    ):
         self.dataset_dir = dataset_dir
         self.types = data_types
         self.filenames = []
         self.transform = transform
         for type_ in self.types:
-            filename = [f'{type_}/{f.name}' for f in (self.dataset_dir / type_).glob("*.inkml")]
+            filename = [
+                f"{type_}/{f.name}" for f in (self.dataset_dir / type_).glob("*.inkml")
+            ]
             self.filenames.extend(filename)
 
     def __len__(self):
@@ -71,15 +92,18 @@ class MathWritingDataset(Dataset):
         image = get_ink_image(ink, IMG_SIZE)
 
         if "normalizedLabel" in ink.annotations:
-          label = ink.annotations['normalizedLabel']
+            label = ink.annotations["normalizedLabel"]
         else:
-          label = ink.annotations['label']
+            label = ink.annotations["label"]
 
-        sample = {'image': image, 'text': text_sequence, 'label': label}
+        sample = {"image": image, "text": text_sequence, "label": label}
 
         if self.transform:
             sample = self.transform(sample)
         return sample
 
-train_dataset = MathWritingDataset("data/", data_types=["train", "symbols", "synthetic"])
+
+train_dataset = MathWritingDataset(
+    "data/", data_types=["train", "symbols", "synthetic"]
+)
 validation_dataset = MathWritingDataset("data/", data_types=["test"])
