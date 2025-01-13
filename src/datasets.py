@@ -108,4 +108,4 @@ class MathWritingDataset(Dataset):
 train_dataset = MathWritingDataset(
     DATA_DIR, data_types=["train", "symbols", "synthetic"]
 )
-validation_dataset = MathWritingDataset("data/", data_types=["test"])
+validation_dataset = MathWritingDataset(DATA_DIR, data_types=["test"])
