@@ -12,13 +12,14 @@ PRETRAINED_DECODER_REPO_ID = config.get("PRETRAINED_DECODER_REPO_ID", "google/vi
 PRETRAINED_ENCODER_REPO_ID = config.get("PRETRAINED_ENCODER_REPO_ID", "google-bert/bert-base-cased")
 IMG_SIZE = config.get("IMG_SIZE", 224)
 TIME_SAMPLING_DELTA = config.get("INK_TIME_SAMPLING_DELTA", 30)
+MAX_LENGTH = config.get("max_length", 64)
 
 
 def train_collate_fn(batch):
     images = [item["image"] for item in batch]
     labels = [item["label"] for item in batch]
 
-    labels_ids = custom_tokenizer(labels, return_tensors="pt")["input_ids"]
+    labels_ids = custom_tokenizer(labels, return_tensors="pt", padding=True, max_length=MAX_LENGTH)["input_ids"]
 
     pixel_values = custom_image_processor(images, return_tensors="pt")["pixel_values"]
 
