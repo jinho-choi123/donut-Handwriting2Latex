@@ -11,7 +11,7 @@ config = {
     "max_new_tokens": 64,
     "INIT_LR": 1e-4,
     "batch_size": 16,
-    "num_workers": 4,
+    "num_workers": 2,
     "lora_r": 8,
     "load_lora": False,
     "wandb_project": "Handwriting2Latex",
