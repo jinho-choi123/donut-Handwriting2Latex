@@ -1,0 +1,42 @@
+{
+  "os":  "macOS-15.2-arm64-arm-64bit",
+  "python":  "CPython 3.11.10",
+  "startedAt":  "2025-01-13T16:44:18.911055Z",
+  "program":  "<python with no main file>",
+  "git":  {
+    "remote":  "git@github.com:jinho-choi123/donut-Handwriting2Latex.git",
+    "commit":  "0328c2d0ad4260ed343be98803e6e35bb84c1d8c"
+  },
+  "email":  "choijinho817@gmail.com",
+  "root":  ".",
+  "host":  "CHOIs-MacBook-Air-2.local",
+  "executable":  "/Volumes/workspace/projects/donut-Handwriting2Latex/.venv/bin/python3",
+  "cpu_count":  8,
+  "cpu_count_logical":  8,
+  "disk":  {
+    "/":  {
+      "total":  "245107195904",
+      "used":  "199803432960"
+    },
+    "/System/Volumes/Data":  {
+      "total":  "245107195904",
+      "used":  "199803432960"
+    }
+  },
+  "memory":  {
+    "total":  "17179869184"
+  },
+  "cpu":  {
+    "count":  8,
+    "countLogical":  8
+  },
+  "apple":  {
+    "name":  "Apple M2",
+    "ecpuCores":  4,
+    "pcpuCores":  4,
+    "gpuCores":  8,
+    "memoryGb":  16,
+    "swapTotalBytes":  "1073741824",
+    "ramTotalBytes":  "17179869184"
+  }
+}
