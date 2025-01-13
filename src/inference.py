@@ -29,7 +29,7 @@ else:
     label = ink.annotations["label"]
 
 model = DonutSwinModel.from_pretrained(PRETRAINED_REPO_ID)
-model.resize_token_embeddings(len(processor.tokenizer))
+model.decoder.resize_token_embeddings(len(processor.tokenizer))
 
 model = PeftModel.from_pretrained(model, FINETUNED_REPO_ID, is_trainable=False)
 
