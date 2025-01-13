@@ -3,7 +3,7 @@ import torch
 torch.manual_seed(42)
 
 from peft.peft_model import PeftModel
-from transformers import BitsAndBytesConfig, DonutSwinModel
+from transformers import BitsAndBytesConfig, DonutSwinModel, VisionEncoderDecoderModel
 from peft import get_peft_model, LoraConfig
 from .config import config
 from lightning.pytorch.loggers import WandbLogger
@@ -38,7 +38,7 @@ lora_config = LoraConfig(
     task_type="CAUSAL_LM",
 )
 
-model = DonutSwinModel.from_pretrained(
+model = VisionEncoderDecoderModel.from_pretrained(
     PRETRAINED_REPO_ID, quantization_config=bnb_config
 )
 model.decoder.resize_token_embeddings(len(processor.tokenizer))

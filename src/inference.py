@@ -1,7 +1,7 @@
 from datasets import PRETRAINED_REPO_ID, TIME_SAMPLING_DELTA
 from .config import config
 
-from transformers import DonutSwinModel
+from transformers import VisionEncoderDecoderModel
 from peft import PeftModel
 import torch
 from PIL import Image
@@ -28,7 +28,7 @@ if "normalizedLabel" in ink.annotations:
 else:
     label = ink.annotations["label"]
 
-model = DonutSwinModel.from_pretrained(PRETRAINED_REPO_ID)
+model = VisionEncoderDecoderModel.from_pretrained(PRETRAINED_REPO_ID)
 model.decoder.resize_token_embeddings(len(processor.tokenizer))
 
 model = PeftModel.from_pretrained(model, FINETUNED_REPO_ID, is_trainable=False)
