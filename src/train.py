@@ -27,14 +27,19 @@ bnb_config = BitsAndBytesConfig(
 )
 lora_config = LoraConfig(
     r=config.get("lora_r", 8),
+    lora_dropout=0.1,
     target_modules=[
-        "q_proj",
-        "o_proj",
-        "k_proj",
-        "v_proj",
-        "gate_proj",
-        "up_proj",
-        "down_proj",
+        'query',
+        'key',
+        'value',
+        'intermediate.dense',
+        'output.dense',
+        'wte',
+        'wpe',
+        'c_attn',
+        'c_proj',
+        'q_attn',
+        'c_fc'
     ],
     task_type="CAUSAL_LM",
 )
