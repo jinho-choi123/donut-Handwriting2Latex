@@ -238,4 +238,4 @@ new_tokens = [
 ]
 
 new_tokens = set(new_tokens) - set(custom_tokenizer.vocab.keys())
-custom_tokenizer.add_tokens(new_tokens)
+custom_tokenizer.add_tokens(list(new_tokens))
