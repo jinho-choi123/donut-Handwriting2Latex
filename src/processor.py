@@ -1,10 +1,10 @@
-from transformers import AutoTokenizer, ViTImageProcessor
+from transformers import ViTImageProcessor, BertTokenizer
 from .config import config
 
 PRETRAINED_DECODER_REPO_ID = config.get("PRETRAINED_DECODER_REPO_ID", "google-bert/bert-base-cased")
 PRETRAINED_ENCODER_REPO_ID = config.get("PRETRAINED_ENCODER_REPO_ID", "google/vit-base-patch16-224-in21k")
 
-custom_tokenizer = AutoTokenizer.from_pretrained(PRETRAINED_DECODER_REPO_ID)
+custom_tokenizer = BertTokenizer.from_pretrained(PRETRAINED_DECODER_REPO_ID)
 
 new_tokens = [
     "<eos>",

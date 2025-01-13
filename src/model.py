@@ -4,11 +4,11 @@ import numpy as np
 import evaluate
 import wandb
 from .datasets import (
-    train_dataset,
-    validation_dataset,
-    train_collate_fn,
-    test_collate_fn,
-)
+        train_dataset,
+        validation_dataset,
+        train_collate_fn,
+        test_collate_fn,
+        )
 from torch.utils.data import DataLoader
 
 class Vision_ENC_DEC_LightningModel(L.LightningModule):
