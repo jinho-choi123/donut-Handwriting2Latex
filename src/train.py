@@ -39,7 +39,7 @@ lora_config = LoraConfig(
 )
 
 model = DonutSwinModel.from_pretrained(
-    PRETRAINED_REPO_ID, quantization_cofig=bnb_config
+    PRETRAINED_REPO_ID, quantization_config=bnb_config
 )
 model.resize_token_embeddings(len(processor.tokenizer))
 
