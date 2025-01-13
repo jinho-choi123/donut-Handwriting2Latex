@@ -3,7 +3,9 @@ from .config import config
 from .tokenizer import custom_tokenizer
 from .inkml_parser import read_inkml_file, get_ink_sequence_token, get_ink_image
 from torch.utils.data import Dataset
+from pathlib import Path
 
+DATA_DIR = Path.cwd() / "data"
 
 PRETRAINED_REPO_ID = config.get("PRETRAINED_REPO_ID", "naver-clova-ix/donut-base")
 IMG_SIZE = config.get("IMG_SIZE", 224)
@@ -104,6 +106,6 @@ class MathWritingDataset(Dataset):
 
 
 train_dataset = MathWritingDataset(
-    "data/", data_types=["train", "symbols", "synthetic"]
+    DATA_DIR, data_types=["train", "symbols", "synthetic"]
 )
 validation_dataset = MathWritingDataset("data/", data_types=["test"])
