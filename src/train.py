@@ -3,17 +3,18 @@ import torch
 torch.manual_seed(42)
 
 from peft.peft_model import PeftModel
-from transformers import BitsAndBytesConfig, DonutSwinModel, VisionEncoderDecoderModel
+from transformers import BitsAndBytesConfig, VisionEncoderDecoderModel
 from peft import get_peft_model, LoraConfig
 from .config import config
 from lightning.pytorch.loggers import WandbLogger
 from .callbacks import PushToHubCallback
-from .model import DonutLightningModel
-from .datasets import processor
+from .model import Vision_ENC_DEC_LightningModel
+from .processor import custom_tokenizer
 import lightning as L
 from lightning.pytorch.tuner import Tuner
 
-PRETRAINED_REPO_ID = config.get("PRETRAINED_REPO_ID", "naver-clova-ix/donut-base")
+PRETRAINED_DECODER_REPO_ID = config.get("PRETRAINED_REPO_ID", "naver-clova-ix/donut-base")
+PRETRAINED_ENCODER_REPO_ID = config.get("PRETRAINED_REPO_ID", "google/vit-base-patch16-224-in21k")
 FINETUNED_REPO_ID = config.get("FINTUNED_REPO_ID", "ball1433/Handwriting2Latex")
 
 # define wandb logger
@@ -38,10 +39,14 @@ lora_config = LoraConfig(
     task_type="CAUSAL_LM",
 )
 
-model = VisionEncoderDecoderModel.from_pretrained(
-    PRETRAINED_REPO_ID, quantization_config=bnb_config
+model = VisionEncoderDecoderModel.from_encoder_decoder_pretrained(
+    PRETRAINED_ENCODER_REPO_ID, PRETRAINED_DECODER_REPO_ID, quantization_config=bnb_config
 )
-model.decoder.resize_token_embeddings(len(processor.tokenizer))
+
+model.config.decoder_start_token_id = custom_tokenizer.cls_token_id
+model.config.pad_token_id = custom_tokenizer.pad_token_id
+
+model.decoder.resize_token_embeddings(len(custom_tokenizer))
 
 if config.get("load_lora", False):
     model = PeftModel.from_pretrained(model, FINETUNED_REPO_ID, is_trainable=True)
@@ -50,7 +55,7 @@ else:
 
 model.print_trainable_parameters()
 
-model_module = DonutLightningModel(model, processor, config)
+model_module = Vision_ENC_DEC_LightningModel(model, custom_tokenizer, config)
 
 trainer = L.Trainer(
     accumulate_grad_batches=4,

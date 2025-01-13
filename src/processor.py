@@ -1,9 +1,10 @@
-from transformers import AutoTokenizer
+from transformers import AutoTokenizer, ViTImageProcessor
 from .config import config
 
-PRETRAINED_REPO_ID = config.get("PRETRAINED_REPO_ID", "naver-clova-ix/donut-base")
+PRETRAINED_DECODER_REPO_ID = config.get("PRETRAINED_DECODER_REPO_ID", "google-bert/bert-base-cased")
+PRETRAINED_ENCODER_REPO_ID = config.get("PRETRAINED_ENCODER_REPO_ID", "google/vit-base-patch16-224-in21k")
 
-custom_tokenizer = AutoTokenizer.from_pretrained(PRETRAINED_REPO_ID)
+custom_tokenizer = AutoTokenizer.from_pretrained(PRETRAINED_DECODER_REPO_ID)
 
 new_tokens = [
     "<eos>",
@@ -239,3 +240,6 @@ new_tokens = [
 
 new_tokens = set(new_tokens) - set(custom_tokenizer.vocab.keys())
 custom_tokenizer.add_tokens(list(new_tokens))
+
+custom_image_processor = ViTImageProcessor.from_pretrained(PRETRAINED_ENCODER_REPO_ID)
+

@@ -1,69 +1,38 @@
 from transformers import AutoProcessor
 from .config import config
-from .tokenizer import custom_tokenizer
 from .inkml_parser import read_inkml_file, get_ink_sequence_token, get_ink_image
+from .processor import custom_tokenizer, custom_image_processor
 from torch.utils.data import Dataset
 from pathlib import Path
 
+
 DATA_DIR = Path.cwd() / "data"
 
-PRETRAINED_REPO_ID = config.get("PRETRAINED_REPO_ID", "naver-clova-ix/donut-base")
+PRETRAINED_DECODER_REPO_ID = config.get("PRETRAINED_DECODER_REPO_ID", "google/vit-base-patch16-224-in21k")
+PRETRAINED_ENCODER_REPO_ID = config.get("PRETRAINED_ENCODER_REPO_ID", "google-bert/bert-base-cased")
 IMG_SIZE = config.get("IMG_SIZE", 224)
 TIME_SAMPLING_DELTA = config.get("INK_TIME_SAMPLING_DELTA", 30)
-
-processor = AutoProcessor.from_pretrained(PRETRAINED_REPO_ID)
-
-# change the default tokenizer into custom tokenizer
-processor.tokenizer = custom_tokenizer
 
 
 def train_collate_fn(batch):
     images = [item["image"] for item in batch]
-    text_sequences = ["<image>" + item["text"] for item in batch]
     labels = [item["label"] for item in batch]
 
-    inputs = processor(
-        text=text_sequences,
-        images=images,
-        suffix=labels,
-        return_tensors="pt",
-        padding=True,
-        truncation="only_second",
-        max_length=config.get("max_length"),
-    )
+    labels_ids = custom_tokenizer(labels, return_tensors="pt")["input_ids"]
 
-    input_ids = inputs["input_ids"]
-    token_type_ids = inputs["token_type_ids"]
-    attention_mask = inputs["attention_mask"]
-    pixel_values = inputs["pixel_values"]
-    labels = inputs["labels"]
+    pixel_values = custom_image_processor(images, return_tensors="pt")["pixel_values"]
 
-    assert input_ids.size(1) == labels.size(1)
-
-    assert pixel_values.size() == (len(images), 3, IMG_SIZE, IMG_SIZE)
-
-    return input_ids, token_type_ids, attention_mask, pixel_values, labels
+    return pixel_values, labels_ids
 
 
 def test_collate_fn(batch):
     images = [item["image"] for item in batch]
-    text_sequences = ["<image>" + item["text"] for item in batch]
     labels = [item["label"] for item in batch]
 
-    inputs = processor(
-        text=text_sequences,
-        images=images,
-        return_tensors="pt",
-        padding=True,
-        truncation="only_second",
-        max_length=config.get("max_length"),
-    )
+    # labels_ids = custom_tokenizer(labels, return_tensors="pt")["input_ids"]
+    pixel_values = custom_image_processor(images, return_tensors="pt")["pixel_values"]
 
-    input_ids = inputs["input_ids"]
-    attention_mask = inputs["attention_mask"]
-    pixel_values = inputs["pixel_values"]
-
-    return input_ids, attention_mask, pixel_values, labels
+    return pixel_values, labels
 
 
 class MathWritingDataset(Dataset):

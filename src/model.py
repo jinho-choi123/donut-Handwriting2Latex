@@ -11,13 +11,12 @@ from .datasets import (
 )
 from torch.utils.data import DataLoader
 
-
-class DonutLightningModel(L.LightningModule):
-    def __init__(self, model, processor, config):
+class Vision_ENC_DEC_LightningModel(L.LightningModule):
+    def __init__(self, model, tokenizer, config):
         super().__init__()
         self.model = model
-        self.processor = processor
         self.config = config
+        self.tokenizer = tokenizer 
 
         self.lr = self.config.get("INIT_LR", 1e-4)
         self.batch_size = self.config.get("batch_size", 16)
@@ -34,15 +33,9 @@ class DonutLightningModel(L.LightningModule):
         self.val_bleu_scores = []
 
     def training_step(self, batch, batch_idx):
-        input_ids, token_type_ids, attention_mask, pixel_values, labels = batch
+        pixel_values, labels_ids = batch
 
-        outputs = self.model(
-            input_ids=input_ids,
-            attention_mask=attention_mask,
-            token_type_ids=token_type_ids,
-            pixel_values=pixel_values,
-            labels=labels,
-        )
+        outputs = self.model(pixel_values=pixel_values, labels=labels_ids)
 
         train_loss = outputs.loss
         self.train_losses.append(train_loss.item())
@@ -53,21 +46,17 @@ class DonutLightningModel(L.LightningModule):
         return train_loss
 
     def validation_step(self, batch, batch_idx):
-        input_ids, attention_mask, pixel_values, labels = batch
+        pixel_values, labels = batch
 
-        generated_ids = self.model.generate(
-            input_ids=input_ids,
-            attention_mask=attention_mask,
-            pixel_values=pixel_values,
-            max_new_tokens=self.config.get("max_new_tokens", 64),
-        )
+        generated_ids = self.model.generate(pixel_values)
 
-        predictions = self.processor.batch_decode(
-            generated_ids[:, input_ids.size(1) + 1 :], skip_special_tokens=True
+        predictions = self.tokenizer.batch_decode(
+            generated_ids, skip_special_tokens=True
         )
         bleu_score: float = self.bleu_metric.compute(
             references=labels, predictions=predictions
         )["bleu"]
+
         self.val_bleu_scores.append(bleu_score)
         self.log("val/bleu", bleu_score)
         self.log("val/avg_bleu", np.mean(self.val_bleu_scores))
