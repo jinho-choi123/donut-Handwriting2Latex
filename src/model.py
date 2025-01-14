@@ -56,6 +56,10 @@ class Vision_ENC_DEC_LightningModel(L.LightningModule):
         predictions = self.tokenizer.batch_decode(
             generated_ids, skip_special_tokens=True
         )
+        print(f"validation_step: ")
+        print(f"predictions: {predictions}")
+        print(f"labels: {labels}")
+
         bleu_score: float = self.bleu_metric.compute(
             references=labels, predictions=predictions
         )["bleu"]

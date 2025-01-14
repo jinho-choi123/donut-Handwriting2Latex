@@ -44,12 +44,10 @@ lora_config = LoraConfig(
     task_type="CAUSAL_LM",
 )
 
-# model = VisionEncoderDecoderModel.from_encoder_decoder_pretrained(
-#     PRETRAINED_ENCODER_REPO_ID, PRETRAINED_DECODER_REPO_ID, quantization_config=bnb_config
-# )
 model = VisionEncoderDecoderModel.from_encoder_decoder_pretrained(
-    PRETRAINED_ENCODER_REPO_ID, PRETRAINED_DECODER_REPO_ID
+    PRETRAINED_ENCODER_REPO_ID, PRETRAINED_DECODER_REPO_ID, quantization_config=bnb_config
 )
+
 
 model.config.decoder_start_token_id = custom_tokenizer.cls_token_id
 model.config.vocab_size = len(custom_tokenizer)
