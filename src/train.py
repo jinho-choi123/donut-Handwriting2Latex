@@ -49,6 +49,7 @@ model = VisionEncoderDecoderModel.from_encoder_decoder_pretrained(
 )
 
 model.config.decoder_start_token_id = custom_tokenizer.cls_token_id
+model.config.vocab_size = len(custom_tokenizer)
 model.generation_config.decoder_start_token_id = custom_tokenizer.cls_token_id
 model.config.pad_token_id = custom_tokenizer.pad_token_id
 
