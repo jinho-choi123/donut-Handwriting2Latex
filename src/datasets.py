@@ -19,13 +19,13 @@ def train_collate_fn(batch):
     images = [item["image"] for item in batch]
     labels = [item["label"] for item in batch]
 
-    labels_ids = custom_tokenizer(labels, return_tensors="pt", padding='max_length', max_length=MAX_LENGTH, truncation=True)["input_ids"]
+    labels_ids = custom_tokenizer(labels, return_tensors="pt", padding='max_length', max_length=MAX_LENGTH, truncation=True).input_ids
 
     print(f"in train_collate_fn")
     print(f"labels_ids: {labels_ids}")
     print(f"labels_ids.shape: {labels_ids.shape}")
 
-    pixel_values = custom_image_processor(images, return_tensors="pt")["pixel_values"]
+    pixel_values = custom_image_processor(images, return_tensors="pt").pixel_values
 
     return pixel_values, labels_ids
 
@@ -35,7 +35,7 @@ def test_collate_fn(batch):
     labels = [item["label"] for item in batch]
 
     # labels_ids = custom_tokenizer(labels, return_tensors="pt")["input_ids"]
-    pixel_values = custom_image_processor(images, return_tensors="pt")["pixel_values"]
+    pixel_values = custom_image_processor(images, return_tensors="pt").pixel_values
 
     return pixel_values, labels
 
