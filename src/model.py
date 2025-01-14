@@ -34,10 +34,6 @@ class Vision_ENC_DEC_LightningModel(L.LightningModule):
 
     def training_step(self, batch, batch_idx):
         pixel_values, labels_ids = batch
-
-        print(f"pixel_values: {pixel_values.shape}")
-        print(f"labels_ids: {labels_ids.shape}")
-
         outputs = self.model(pixel_values=pixel_values, labels=labels_ids)
 
         train_loss = outputs.loss
