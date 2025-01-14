@@ -43,7 +43,6 @@ lora_config = LoraConfig(
         'q_attn',
         'c_fc'
     ],
-    task_type="CAUSAL_LM",
 )
 
 model = VisionEncoderDecoderModel.from_encoder_decoder_pretrained(
