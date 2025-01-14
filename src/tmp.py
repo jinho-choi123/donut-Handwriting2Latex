@@ -13,8 +13,10 @@ from .processor import custom_tokenizer
 import lightning as L
 from lightning.pytorch.tuner import Tuner
 
-PRETRAINED_DECODER_REPO_ID = config.get("PRETRAINED_DECODER_REPO_ID", "google-bert/bert-base-cased")
-PRETRAINED_ENCODER_REPO_ID = config.get("PRETRAINED_ENCODER_REPO_ID", "google/vit-base-patch16-224-in21k")
+# PRETRAINED_DECODER_REPO_ID = config.get("PRETRAINED_DECODER_REPO_ID", "google-bert/bert-base-cased")
+PRETRAINED_DECODER_REPO_ID = "google-bert/bert-base-cased"
+# PRETRAINED_ENCODER_REPO_ID = config.get("PRETRAINED_ENCODER_REPO_ID", "google/vit-base-patch16-224-in21k")
+PRETRAINED_ENCODER_REPO_ID="google/vit-base-patch16-224-in21k"
 FINETUNED_REPO_ID = config.get("FINTUNED_REPO_ID", "ball1433/Handwriting2Latex")
 
 # define wandb logger
