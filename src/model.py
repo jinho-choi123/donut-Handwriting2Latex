@@ -36,7 +36,7 @@ class Vision_ENC_DEC_LightningModel(L.LightningModule):
         pixel_values, labels_ids = batch
 
         print(f"pixel_values: {pixel_values}")
-        print(f"labels_ids: {labels_ids}")
+        print(f"labels_ids: {labels_ids.input_ids}")
 
         outputs = self.model(pixel_values=pixel_values, labels=labels_ids)
 
