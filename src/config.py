@@ -10,7 +10,7 @@ config = {
     "max_length": 64,
     "max_new_tokens": 64,
     "INIT_LR": 1e-4,
-    "batch_size": 16,
+    "batch_size": 2,
     "num_workers": 2,
     "lora_r": 8,
     "load_lora": False,
