@@ -63,7 +63,6 @@ model.print_trainable_parameters()
 model_module = Vision_ENC_DEC_LightningModel(model, custom_tokenizer, config)
 
 trainer = L.Trainer(
-    accumulate_grad_batches=4,
     max_epochs=100,
     gradient_clip_val=1.0,
     num_sanity_val_steps=5,
