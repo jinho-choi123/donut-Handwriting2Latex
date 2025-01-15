@@ -9,7 +9,7 @@ config = {
     "FINTUNED_REPO_ID": "ball1433/Handwriting2Latex",
     "max_length": 64,
     "max_new_tokens": 64,
-    "INIT_LR": 5e-4,
+    "INIT_LR": 1e-3,
     "batch_size": 64,
     "num_workers": 4,
     "lora_r": 8,
