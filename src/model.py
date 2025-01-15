@@ -86,6 +86,8 @@ class Vision_ENC_DEC_LightningModel(L.LightningModule):
         return optimizer
 
     def train_dataloader(self):
+        print("Loading Train Dataloader")
+        print(f"Train Dataset Size: {len(train_dataset)}")
         return DataLoader(
             train_dataset,
             batch_size=self.batch_size,
@@ -96,6 +98,8 @@ class Vision_ENC_DEC_LightningModel(L.LightningModule):
         )
 
     def val_dataloader(self):
+        print("Loading Validation Dataloader")
+        print(f"Validation Dataset Size: {len(validation_dataset)}")
         return DataLoader(
             validation_dataset,
             batch_size=self.batch_size,
