@@ -1,7 +1,7 @@
 config = {
     "INK_SEQ_MIN": -500,
     "INK_SEQ_MAX": 500,
-    "INK_TIME_SAMPLING_DELTA": 30,
+    "INK_TIME_SAMPLING_DELTA": 20,
     "INK_PADDING": 4,
     "IMG_SIZE": 224,
     "PRETRAINED_ENCODER_REPO_ID": "google/vit-base-patch16-224-in21k",
@@ -10,7 +10,7 @@ config = {
     "max_length": 64,
     "max_new_tokens": 64,
     "INIT_LR": 5e-4,
-    "batch_size": 2,
+    "batch_size": 64,
     "num_workers": 4,
     "lora_r": 8,
     "load_lora": False,
