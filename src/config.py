@@ -15,4 +15,5 @@ config = {
     "lora_r": 8,
     "load_lora": False,
     "wandb_project": "Handwriting2Latex",
+    "verbose": True,
 }
