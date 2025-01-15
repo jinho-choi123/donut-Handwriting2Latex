@@ -55,6 +55,10 @@ class Vision_ENC_DEC_LightningModel(L.LightningModule):
         predictions = self.tokenizer.batch_decode(
             generated_ids, skip_special_tokens=True
         )
+        print(f"ground_truth: {labels}")
+        print(f"predictions: {predictions}")
+
+
         bleu_score: float = self.bleu_metric.compute(
             references=labels, predictions=predictions
         )["bleu"]
@@ -75,10 +79,6 @@ class Vision_ENC_DEC_LightningModel(L.LightningModule):
                 for i in range(1)
             ]
             
-            print(f"verbose logging at validation step {self.global_step}")
-            print(f"ground_truth: {labels[0]}")
-            print(f"prediction: {predictions[0]}")
-
             self.logger.log_table(key="val/samples", columns=columns, data=datas)
 
         return predictions
