@@ -42,6 +42,9 @@ class Vision_ENC_DEC_LightningModel(L.LightningModule):
         self.log("train/loss", train_loss)
         self.log("train/avg_loss", np.mean(self.train_losses))
 
+        if batch_idx % 50 == 5:
+            print(f"Avg Train Loss at EPOCH #{self.current_epoch}, BATCH_IDX {batch_idx}: {np.mean(self.train_losses)}")
+
         return train_loss
 
     def validation_step(self, batch, batch_idx):
@@ -71,6 +74,10 @@ class Vision_ENC_DEC_LightningModel(L.LightningModule):
                 ]
                 for i in range(1)
             ]
+            
+            print(f"verbose logging at validation step {self.global_step}")
+            print(f"ground_truth: {labels[0]}")
+            print(f"prediction: {predictions[0]}")
 
             self.logger.log_table(key="val/samples", columns=columns, data=datas)
 
